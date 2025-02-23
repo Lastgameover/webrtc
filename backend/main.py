@@ -39,13 +39,14 @@ class Browser:
         try:
             if self.driver:
                 self.driver.quit()
-                
             chrome_options = Options()
+            chrome_options.add_argument("--headless")  # enable headless mode for faster startup
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.add_argument("--window-size=1920,1080")  # Higher resolution
-            chrome_options.add_argument("--disable-gpu")  # Try this if having rendering issues
+            chrome_options.add_argument("--window-size=1280,720")  # lower resolution for faster capture
+            chrome_options.add_argument("--disable-gpu")
             self.driver = webdriver.Chrome(options=chrome_options)
+            self.driver.get("https://google.com")
             logger.info("Browser initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize browser: {e}")
@@ -89,8 +90,8 @@ class BrowserVideoStreamTrack(VideoStreamTrack):
             frame.time_base = Fraction(1, 30)
             self.frame_count += 1
             
-            # Add small delay to control frame rate
-            await asyncio.sleep(1/30)
+            # Remove or reduce sleep for near real-time update:
+            await asyncio.sleep(0.001)  # minimal delay; adjust as needed or remove entirely
             return frame
         except Exception as e:
             logger.error(f"Error capturing frame: {e}", exc_info=True)
