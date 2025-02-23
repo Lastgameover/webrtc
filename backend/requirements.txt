@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+selenium
+aiortc
+aiohttp
+python-multipart
+av
